@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Add Entry</h1>
+
+<form method="POST" class="bg-white p-4 rounded shadow mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div>
+    <label class="block text-sm text-gray-500">Date</label>
+    <input type="date" name="entry_date" class="border rounded px-3 py-2 w-full" required>
+  </div>
+  <div>
+    <label class="block text-sm text-gray-500">Agent</label>
+    <select name="agent_name" class="border rounded px-3 py-2 w-full" required>
+      <option value="">Select...</option>
+      {% for a in agents %}<option>{{ a }}</option>{% endfor %}
+    </select>
+  </div>
+  <div>
+    <label class="block text-sm text-gray-500">Category</label>
+    <select name="category_name" class="border rounded px-3 py-2 w-full" required>
+      <option value="">Select...</option>
+      {% for c in cats %}<option>{{ c }}</option>{% endfor %}
+    </select>
+  </div>
+  <div>
+    <label class="block text-sm text-gray-500">Quotes</label>
+    <input type="number" name="quotes" min="0" class="border rounded px-3 py-2 w-full">
+  </div>
+  <div>
+    <label class="block text-sm text-gray-500">Sales</label>
+    <input type="number" name="sales" min="0" class="border rounded px-3 py-2 w-full">
+  </div>
+  <div>
+    <label class="block text-sm text-gray-500">Total Premium ($)</label>
+    <input type="number" step="0.01" name="premium" min="0" class="border rounded px-3 py-2 w-full">
+  </div>
+  <div>
+    <label class="block text-sm text-gray-500">Lead Source</label>
+    <select name="lead_source_name" class="border rounded px-3 py-2 w-full">
+      <option value="">Select...</option>
+      {% for l in leads %}<option>{{ l }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="md:col-span-3">
+    <button class="bg-blue-600 text-white px-4 py-2 rounded">Save Entry</button>
+  </div>
+</form>
+
+<h2 class="text-xl font-semibold mb-2">Recent Entries</h2>
+<div class="bg-white p-4 rounded shadow overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b">
+        <th class="text-left py-2">Date</th><th class="text-left">Agent</th><th class="text-left">Category</th>
+        <th class="text-right">Quotes</th><th class="text-right">Sales</th><th class="text-right">Premium</th><th class="text-left">Lead Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in latest %}
+      <tr class="border-b">
+        <td class="py-2">{{ e['entry_date'] }}</td>
+        <td>{{ e['agent'] }}</td>
+        <td>{{ e['category'] }}</td>
+        <td class="text-right">{{ e['quotes'] }}</td>
+        <td class="text-right">{{ e['sales'] }}</td>
+        <td class="text-right">${{ '%.0f'|format(e['premium'] or 0) }}</td>
+        <td>{{ e['lead_source'] or '' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
